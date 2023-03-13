@@ -10,6 +10,34 @@ const {
     // updateContact,
 } = require('../../models/contacts');
 
+// ------------------------------------------------------------------------------------------------
+
+/** MIDDLEWARES
+ * Chek if user exists.
+ */
+// router.use('/:contactId', async (req, res, next) => {
+//   const { contactId } = req.params;
+//   const contactById = await getContactById(contactId);
+
+//   if (!contactById) {
+//     return res.status(404).json({
+//       message: "Not found"
+//     });
+//   };
+
+//   req.contact = contactById;
+
+//   next();
+// })
+
+// router.get('/:contactId', (req, res, next) => {
+//   const { contact } = req;
+  
+//   res.status(200).json(contact);
+// })
+
+// ------------------------------------------------------------------------------------------------
+
 router.get('/', async (req, res, next) => {
   const allContacts = await listContacts();
   res.status(200).json(allContacts);
