@@ -69,16 +69,24 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   try {
     const data = await fs.readFile(contactsPath, 'utf8');
-    const contactById = JSON.parse(data).find(contact => contact.id === contactId);
-
-    const { name, email, phone } = body;
-
-    contactById.name = name;
-    contactById.email = email;
-    contactById.phone = phone;
+    const listContacts = JSON.parse(data);
     
-    listContacts.push(contactById);
+    const { name, email, phone } = body;
+    
+    listContacts.forEach(contact => {
+      if (contact.id === contactId) {
+        contact.name = name;
+        contact.email = email;
+        contact.phone = phone;
+
+        return contact;
+      }
+    });
+    
     await fs.writeFile(contactsPath, JSON.stringify(listContacts), 'utf8');
+
+    const newData = await fs.readFile(contactsPath, 'utf8');
+    const contactById = JSON.parse(newData).find(contact => contact.id === contactId);
 
     return contactById; 
   } catch (error) {
