@@ -5,9 +5,9 @@ const router = express.Router()
 const {
     listContacts,
     getContactById,
-    // removeContact,
-    // addContact,
-    // updateContact,
+    removeContact,
+    addContact,
+    updateContact,
 } = require('../../models/contacts');
 
 // ------------------------------------------------------------------------------------------------
@@ -36,6 +36,13 @@ const {
 //   res.status(200).json(contact);
 // })
 
+// router.delete('/:contactId', async (req, res, next) => {
+//   const { contact } = req;
+//   await removeContact(contact.id);
+
+//   res.status(200).json({ message: "contact deleted" });
+// })
+
 // ------------------------------------------------------------------------------------------------
 
 router.get('/', async (req, res, next) => {
@@ -56,15 +63,28 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const newContact = await addContact(req.body);
+  
+  res.status(201).json(newContact);
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const { contactId } = req.params;
+  const contactById = await removeContact(contactId);
+
+  if (!contactById) {
+    res.status(404).json({ message: "Not found" });
+    return;
+  }
+
+  res.status(200).json({ message: "contact deleted" });
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const { contactId } = req.params;
+  const updatedContact = await updateContact(contactId, req.body);
+
+  res.status(201).json(updatedContact);
 })
 
 module.exports = router
