@@ -1,8 +1,8 @@
-const fs = require('fs/promises')
-const path = require('path')
-const uuid = require('uuid').v4
+const fs = require('fs/promises');
+const path = require('path');
+const uuid = require('uuid').v4;
 
-const contactsPath = path.resolve('models/contacts.json')
+const contactsPath = path.resolve('models/contacts.json');
 
 const listContacts = async () => {
   try {
@@ -14,7 +14,7 @@ const listContacts = async () => {
     console.log(error.name);
     console.log(error.message);
   }
-}
+};
 
 const getContactById = async (contactId) => {
   try {
@@ -26,7 +26,7 @@ const getContactById = async (contactId) => {
     console.log(error.name);
     console.log(error.message);
   }
-}
+};
 
 const removeContact = async (contactId) => {
   try {
@@ -41,7 +41,7 @@ const removeContact = async (contactId) => {
     console.log(error.name);
     console.log(error.message);
   }
-}
+};
 
 const addContact = async (body) => {
   try {
@@ -64,7 +64,7 @@ const addContact = async (body) => {
     console.log(error.name);
     console.log(error.message);
   }
-}
+};
 
 const updateContact = async (contactId, body) => {
   try {
@@ -88,12 +88,12 @@ const updateContact = async (contactId, body) => {
     const newData = await fs.readFile(contactsPath, 'utf8');
     const contactById = JSON.parse(newData).find(contact => contact.id === contactId);
 
-    return contactById; 
+    return contactById;
   } catch (error) {
     console.log(error.name);
     console.log(error.message);
   }
-}
+};
 
 module.exports = {
   listContacts,
@@ -101,4 +101,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};

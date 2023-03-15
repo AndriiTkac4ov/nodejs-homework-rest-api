@@ -2,7 +2,11 @@ const express = require('express')
 
 const router = express.Router()
 
-const { checkContactById } = require('../../middlewares/contactsMiddlewares');
+const {
+    checkContactById,
+    validateCreateContact,
+    validateEditeContact,
+} = require('../../middlewares');
 
 const {
     getContactsController,
@@ -12,16 +16,16 @@ const {
     editeContactController,
 } = require('../../controllers/contactsControllers');
 
-// router.use('/:contactId', checkContactById)
+router.use('/:contactId', checkContactById)
 
 router.get('/', getContactsController)
 
-router.get('/:contactId', checkContactById, getContactByIdController)
+router.get('/:contactId', getContactByIdController)
 
-router.post('/', createContactController)
+router.post('/', validateCreateContact, createContactController)
 
-router.delete('/:contactId', checkContactById, deleteContactController)
+router.delete('/:contactId', deleteContactController)
 
-router.put('/:contactId', checkContactById, editeContactController)
+router.put('/:contactId', validateEditeContact, editeContactController)
 
 module.exports = router
