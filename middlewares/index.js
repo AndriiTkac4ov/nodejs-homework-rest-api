@@ -1,11 +1,11 @@
-const { checkContactById } = require('./contactsMiddlewares');
 const {
-    validateCreateContact,
-    validateEditeContact,
-} = require('./validatorsMiddlewares');
+    checkContactById,
+    validateCreatedContact,
+    validateEditedContact,
+} = require('./contactsMiddlewares');
 
 module.exports = {
     checkContactById,
-    validateCreateContact,
-    validateEditeContact,
+    validateCreatedContact,
+    validateEditedContact,
 };

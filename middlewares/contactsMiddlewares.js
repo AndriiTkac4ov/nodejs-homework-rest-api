@@ -1,5 +1,9 @@
 const { getContactById } = require('../models/contacts');
-const { AppError } = require('../utils');
+const {
+    AppError,
+    createContactDataValidator,
+    editeContactDataValidator,
+} = require('../utils');
 
 exports.checkContactById = async (req, res, next) => {
     const { contactId } = req.params;
@@ -16,3 +20,31 @@ exports.checkContactById = async (req, res, next) => {
 
     next();
 }
+
+exports.validateCreatedContact = (req, res, next) => {
+    const { error, value } = createContactDataValidator(req.body);
+
+    if (error) {
+        return next(new AppError(400, `missing required ${error.details[0].path[0]} field`));
+    } else {
+        req.body = value;
+
+        next();
+    };
+};
+
+exports.validateEditedContact = (req, res, next) => {
+    const { error, value } = editeContactDataValidator(req.body);
+    console.log(Object.values(value).length);
+    // if (Object.values(value).length === 0) {
+    //     console.log(`Hello!!! ${value}`);
+    // }
+
+    if (error) {
+        return next(new AppError(400, error.details[0].message));
+    } else {
+        // req.body = value;
+
+        next();
+    };
+};
