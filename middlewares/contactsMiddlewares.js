@@ -35,15 +35,11 @@ exports.validateCreatedContact = (req, res, next) => {
 
 exports.validateEditedContact = (req, res, next) => {
     const { error, value } = editeContactDataValidator(req.body);
-    console.log(Object.values(value).length);
-    // if (Object.values(value).length === 0) {
-    //     console.log(`Hello!!! ${value}`);
-    // }
 
     if (error) {
         return next(new AppError(400, error.details[0].message));
     } else {
-        // req.body = value;
+        req.body = value;
 
         next();
     };
