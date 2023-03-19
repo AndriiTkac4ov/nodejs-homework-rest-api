@@ -5,6 +5,8 @@ const {
     updateContact,
 } = require('../models/contacts');
 
+const Contact = require('../models/contactModel');
+
 exports.getContactsController = async (req, res, next) => {
     const allContacts = await listContacts();
     res.status(200).json(allContacts);
