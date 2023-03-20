@@ -13,7 +13,7 @@ const {
     getContactByIdController,
     createContactController,
     deleteContactController,
-    // editeContactController,
+    editeContactController,
 } = require('../../controllers/contactsControllers');
 
 // router.use('/:contactId', checkContactById)
@@ -28,6 +28,8 @@ router.post('/',
 
 router.delete('/:contactId', deleteContactController)
 
-// router.put('/:contactId', validateEditedContact, editeContactController)
+router.put('/:contactId',
+    // validateEditedContact,
+    editeContactController)
 
 module.exports = router
