@@ -2,29 +2,31 @@ const express = require('express')
 
 const router = express.Router()
 
-const {
-    checkContactById,
-    // validateCreatedContact,
-    // validateEditedContact,
-} = require('../../middlewares');
+// const {
+//     checkContactById,
+//     validateCreatedContact,
+//     validateEditedContact,
+// } = require('../../middlewares');
 
 const {
     getContactsController,
-    // getContactByIdController,
-    // createContactController,
-    // deleteContactController,
+    getContactByIdController,
+    createContactController,
+    deleteContactController,
     // editeContactController,
 } = require('../../controllers/contactsControllers');
 
-router.use('/:contactId', checkContactById)
+// router.use('/:contactId', checkContactById)
 
 router.get('/', getContactsController)
 
-// router.get('/:contactId', getContactByIdController)
+router.get('/:contactId', getContactByIdController)
 
-// router.post('/', validateCreatedContact, createContactController)
+router.post('/',
+    // validateCreatedContact,
+    createContactController)
 
-// router.delete('/:contactId', deleteContactController)
+router.delete('/:contactId', deleteContactController)
 
 // router.put('/:contactId', validateEditedContact, editeContactController)
 

@@ -10,24 +10,39 @@ exports.getContactsController = async (req, res, next) => {
     }
 };
 
-// exports.getContactByIdController = async (req, res, next) => {
-//     const { contact } = req;
+exports.getContactByIdController = async (req, res, next) => {
+    const { contactId } = req.params;
 
-//     res.status(200).json(contact);
-// };
+    try {
+        const contactById = await service.getContactById(contactId);;
+        res.status(200).json(contactById);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
-// exports.createContactController = async (req, res, next) => {
-//     const newContact = await addContact(req.body);
+exports.createContactController = async (req, res, next) => {
+    try {
+        const newContact = await service.addContact(req.body);;
+        res.status(201).json(newContact);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
-//     res.status(201).json(newContact);
-// };
+exports.deleteContactController = async (req, res, next) => {
+    const { contactId } = req.params;
 
-// exports.deleteContactController = async (req, res, next) => {
-//     const { contact } = req;
-//     await removeContact(contact.id);
-
-//     res.status(200).json({ message: "contact deleted" });
-// };
+    try {
+        await service.removeContact(contactId);;
+        res.status(200).json({ message: "contact deleted" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
 // exports.editeContactController = async (req, res, next) => {
 //     const { contact } = req;
