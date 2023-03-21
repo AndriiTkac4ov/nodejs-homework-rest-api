@@ -1,27 +1,30 @@
-const { getContactById } = require('../models/contacts');
+const Contact = require('../service/schemas/contactModel');
+const { Types } = require('mongoose');
 const {
     AppError,
     createContactDataValidator,
     editeContactDataValidator,
 } = require('../utils');
 
-exports.checkContactById = async (req, res, next) => {
+const checkContactById = async (req, res, next) => {
     const { contactId } = req.params;
-    const contactById = await getContactById(contactId);
 
-    if (!contactById) {
-        // return res.status(404).json({
-        //     message: "Not found"
-        // });
+    const idIsValid = Types.ObjectId.isValid(contactId);
+    
+    if (!idIsValid) {
         return next(new AppError(404, "Not found"));
     };
 
-    req.contact = contactById;
+    const contactExists = await Contact.exists({ _id: contactId });
+
+    if (!contactExists) {
+        return next(new AppError(404, "Not found"));
+    };
 
     next();
 }
 
-exports.validateCreatedContact = (req, res, next) => {
+const validateCreatedContact = (req, res, next) => {
     const { error, value } = createContactDataValidator(req.body);
 
     if (error) {
@@ -33,8 +36,12 @@ exports.validateCreatedContact = (req, res, next) => {
     };
 };
 
-exports.validateEditedContact = (req, res, next) => {
+const validateEditedContact = (req, res, next) => {
     const { error, value } = editeContactDataValidator(req.body);
+
+    if (Object.keys(req.body).length === 0) {
+        return next(new AppError(400, "missing fields"));
+    }
 
     if (error) {
         return next(new AppError(400, error.details[0].message));
@@ -43,4 +50,27 @@ exports.validateEditedContact = (req, res, next) => {
 
         next();
     };
+};
+
+const validateEditedStatus = (req, res, next) => {
+    const { error, value } = editeContactDataValidator(req.body);
+
+    if (!Object.keys(req.body).includes('favorite')) {
+        return next(new AppError(400, "missing field favorite"));
+    }
+
+    if (error) {
+        return next(new AppError(400, error.details[0].message));
+    } else {
+        req.body = value;
+
+        next();
+    };
+};
+
+module.exports = {
+    checkContactById,
+    validateCreatedContact,
+    validateEditedContact,
+    validateEditedStatus,
 };

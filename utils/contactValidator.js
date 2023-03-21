@@ -14,6 +14,7 @@ const createContactDataValidator = (data) => {
             .min(7)
             .max(13)
             .required(),
+        favorite: Joi.bool(),
     });
 
     return schema.validate(data);
@@ -30,6 +31,7 @@ const editeContactDataValidator = (data) => {
         phone: Joi.string()
             .min(7)
             .max(13),
+        favorite: Joi.bool(),
     });
 
     return schema.validate(data);

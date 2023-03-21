@@ -1,6 +1,6 @@
-const service = require('../service');
+const service = require('../service/contactsService');
 
-exports.getContactsController = async (req, res, next) => {
+const getContactsController = async (req, res, next) => {
     try {
         const allContacts = await service.listContacts();
         res.status(200).json(allContacts);
@@ -10,7 +10,7 @@ exports.getContactsController = async (req, res, next) => {
     }
 };
 
-exports.getContactByIdController = async (req, res, next) => {
+const getContactByIdController = async (req, res, next) => {
     const { contactId } = req.params;
 
     try {
@@ -22,7 +22,7 @@ exports.getContactByIdController = async (req, res, next) => {
     }
 };
 
-exports.createContactController = async (req, res, next) => {
+const createContactController = async (req, res, next) => {
     try {
         const newContact = await service.addContact(req.body);;
         res.status(201).json(newContact);
@@ -32,7 +32,7 @@ exports.createContactController = async (req, res, next) => {
     }
 };
 
-exports.deleteContactController = async (req, res, next) => {
+const deleteContactController = async (req, res, next) => {
     const { contactId } = req.params;
 
     try {
@@ -44,7 +44,7 @@ exports.deleteContactController = async (req, res, next) => {
     }
 };
 
-exports.editeContactController = async (req, res, next) => {
+const editeContactController = async (req, res, next) => {
     const { contactId } = req.params;
 
     try {
@@ -56,15 +56,23 @@ exports.editeContactController = async (req, res, next) => {
     }
 };
 
-// exports.editeContactController = async (req, res, next) => {
-//     const { contact } = req;
+const statusContactController = async (req, res, next) => {
+    const { contactId } = req.params;
 
-//     if (Object.keys(req.body).length === 0) {
-//         res.status(400).json({ "message": "missing fields" });
-//         return;
-//     }
+    try {
+        const updatedContact = await service.updateStatusContact(contactId, req.body);
+        res.status(200).json(updatedContact);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
-//     const updatedContact = await updateContact(contact.id, req.body);
-
-//     res.status(200).json(updatedContact);
-// };
+module.exports = {
+    getContactsController,
+    getContactByIdController,
+    createContactController,
+    deleteContactController,
+    editeContactController,
+    statusContactController,
+};
