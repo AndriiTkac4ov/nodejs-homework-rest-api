@@ -2,30 +2,30 @@ const express = require('express')
 
 const router = express.Router()
 
-const {
-    checkContactById,
-    validateCreatedContact,
-    validateEditedContact,
-} = require('../../middlewares');
+const contactsControllers = require('../../controllers/contactsControllers')
+const contactsMiddlewares = require('../../middlewares/contactsMiddlewares')
 
-const {
-    getContactsController,
-    getContactByIdController,
-    createContactController,
-    deleteContactController,
-    editeContactController,
-} = require('../../controllers/contactsControllers');
+router.route('/')
+    .get(contactsControllers.getContactsController)
+    .post(
+        contactsMiddlewares.validateCreatedContact,
+        contactsControllers.createContactController
+    )
 
-router.use('/:contactId', checkContactById)
+router.use('/:contactId', contactsMiddlewares.checkContactById)
 
-router.get('/', getContactsController)
-
-router.get('/:contactId', getContactByIdController)
-
-router.post('/', validateCreatedContact, createContactController)
-
-router.delete('/:contactId', deleteContactController)
-
-router.put('/:contactId', validateEditedContact, editeContactController)
+router.route('/:contactId')
+    .get(contactsControllers.getContactByIdController)
+    .delete(contactsControllers.deleteContactController)
+    .put(
+        contactsMiddlewares.validateEditedContact,
+        contactsControllers.editeContactController
+    )
+    
+router.route('/:contactId/favorite')
+    .patch(
+        contactsMiddlewares.validateEditedStatus,
+        contactsControllers.statusContactController
+    )
 
 module.exports = router
