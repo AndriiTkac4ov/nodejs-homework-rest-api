@@ -2,12 +2,13 @@ const express = require('express')
 
 const router = express.Router()
 
-const usersControllers = require('../../controllers/usersControllers')
+const controllers = require('../../controllers')
+const middlewares = require('../../middlewares')
 
 router.route('/register')
     .post(
-        // contactsMiddlewares.validateCreatedContact,
-        usersControllers.registerController
+        middlewares.validateUserRegistration,
+        controllers.registerController,
     )
 
 module.exports = router
