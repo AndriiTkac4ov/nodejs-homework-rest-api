@@ -10,5 +10,17 @@ router.route('/register')
         middlewares.validateUserRegistration,
         controllers.registerController,
     )
+    
+router.route('/login')
+    .post(
+        middlewares.validateUserLogin,
+        controllers.loginController,
+    )
+
+// router.route('/logout')
+//     .post(
+//         middlewares.validateUserLogout,
+//         controllers.logoutController,
+//     )
 
 module.exports = router
