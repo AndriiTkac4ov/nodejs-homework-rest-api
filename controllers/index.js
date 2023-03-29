@@ -1,13 +1,7 @@
-const {
-    registerController,
-    loginController,
-    logoutController,
-    currentUserController,
-} = require('./usersControllers');
+const contacts = require('./contactsControllers');
+const users = require('./usersControllers');
 
 module.exports = {
-    registerController,
-    loginController,
-    logoutController,
-    currentUserController,
+    contacts,
+    users,
 };

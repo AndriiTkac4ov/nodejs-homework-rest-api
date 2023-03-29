@@ -1,21 +1,9 @@
-const {
-    checkContactById,
-    validateCreatedContact,
-    validateEditedContact,
-    validateEditedContactStatus,
-} = require('./contactsMiddlewares');
-const {
-    validateUserRegistration,
-    validateUserLogin,
-} = require('./usersMiddlewares');
+const contacts = require('./contactsMiddlewares');
+const users = require('./usersMiddlewares');
 const auth = require('./auth');
 
 module.exports = {
-    checkContactById,
-    validateCreatedContact,
-    validateEditedContact,
-    validateEditedContactStatus,
-    validateUserRegistration,
-    validateUserLogin,
+    contacts,
+    users,
     auth,
 };
