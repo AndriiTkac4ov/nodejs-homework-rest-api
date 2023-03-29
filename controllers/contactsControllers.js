@@ -17,9 +17,10 @@ const getContactsController = async (req, res, next) => {
 
 const getContactByIdController = async (req, res, next) => {
     const { contactId } = req.params;
+    const { _id } = req.user;
 
     try {
-        const contactById = await service.getContactById(contactId);
+        const contactById = await service.getContactById({ _id: contactId, owner: _id });
         res.status(200).json(contactById);
     } catch (error) {
         console.log(error);
@@ -41,9 +42,17 @@ const createContactController = async (req, res, next) => {
 
 const deleteContactController = async (req, res, next) => {
     const { contactId } = req.params;
+    const { _id } = req.user;
 
     try {
-        await service.removeContact(contactId);;
+        const deletedContact = await service.removeContact({ _id: contactId, owner: _id });
+
+        if (!deletedContact) {
+            return res.status(404).json({
+                message: 'contact not found',
+            });
+        };
+
         res.status(200).json({ message: "contact deleted" });
     } catch (error) {
         console.log(error);
@@ -53,9 +62,17 @@ const deleteContactController = async (req, res, next) => {
 
 const editeContactController = async (req, res, next) => {
     const { contactId } = req.params;
+    const { _id } = req.user;
 
     try {
-        const updatedContact = await service.updateContact(contactId, req.body);
+        const updatedContact = await service.updateContact({ _id: contactId, owner: _id }, req.body);
+
+        if (!updatedContact) {
+            return res.status(404).json({
+                message: 'contact not found',
+            });
+        };
+
         res.status(200).json(updatedContact);
     } catch (error) {
         console.log(error);
@@ -65,9 +82,17 @@ const editeContactController = async (req, res, next) => {
 
 const statusContactController = async (req, res, next) => {
     const { contactId } = req.params;
+    const { _id } = req.user;
 
     try {
-        const updatedContact = await service.updateStatusContact(contactId, req.body);
+        const updatedContact = await service.updateStatusContact({ _id: contactId, owner: _id }, req.body);
+
+        if (!updatedContact) {
+            return res.status(404).json({
+                message: 'contact not found',
+            });
+        };
+        
         res.status(200).json(updatedContact);
     } catch (error) {
         console.log(error);
