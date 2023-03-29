@@ -1,13 +1,14 @@
 const {
     AppError,
     registerUserDataValidator,
+    loginUserDataValidator,
 } = require('../utils');
 
 const validateUserRegistration = (req, res, next) => {
     const { error, value } = registerUserDataValidator(req.body);
 
     if (error) {
-        return next(new AppError(400, "Помилка від Joi або іншої бібліотеки валідації"));
+        return next(new AppError(400, error.details[0].context.key + ' field is not valid'));
     } else {
         req.body = value;
 
@@ -16,10 +17,10 @@ const validateUserRegistration = (req, res, next) => {
 };
 
 const validateUserLogin = (req, res, next) => {
-    const { error, value } = registerUserDataValidator(req.body);
+    const { error, value } = loginUserDataValidator(req.body);
 
     if (error) {
-        return next(new AppError(400, "Помилка від Joi або іншої бібліотеки валідації"));
+        return next(new AppError(400, error.details[0].context.key + ' field is not valid'));
     } else {
         req.body = value;
 

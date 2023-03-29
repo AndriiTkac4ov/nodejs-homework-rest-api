@@ -6,6 +6,7 @@ const {
 } = require('./contactValidator');
 const {
     registerUserDataValidator,
+    loginUserDataValidator,
 } = require('./userValidator');
 
 module.exports = {
@@ -14,4 +15,5 @@ module.exports = {
     createContactDataValidator,
     editeContactDataValidator,
     registerUserDataValidator,
+    loginUserDataValidator,
 };

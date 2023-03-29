@@ -23,4 +23,10 @@ router.route('/login')
 //         controllers.logoutController,
 //     )
 
+router.route('/current')
+    .get(
+        middlewares.auth,
+        controllers.currentUserController,
+    )
+
 module.exports = router

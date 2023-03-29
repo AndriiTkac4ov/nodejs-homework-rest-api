@@ -69,9 +69,25 @@ const loginController = async (req, res, next) => {
     }
 };
 
+const logoutController = async (req, res, next) => {
+    const { password, email } = req.body;
+
+    console.log(password);
+    console.log(email);
+};
+
+const currentUserController = async (req, res, next) => {
+    const { email, subscription } = req.user;
+    
+    res.status(200).json({
+        email,
+        subscription,
+    });
+};
+
 module.exports = {
     registerController,
     loginController,
-    // logoutController,
-    // currentUserController,
+    logoutController,
+    currentUserController,
 };
