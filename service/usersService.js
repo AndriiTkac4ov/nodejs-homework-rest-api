@@ -8,6 +8,10 @@ const findUserById = async (id) => {
     return await User.findById(id);
 };
 
+const findUserByIdAndUpdate = async (id, token) => {
+    return await User.findByIdAndUpdate(id, {token});
+};
+
 const registerUser = async (newBody) => {
     return await User.create(newBody);
 };
@@ -15,5 +19,6 @@ const registerUser = async (newBody) => {
 module.exports = {
     findUser,
     findUserById,
+    findUserByIdAndUpdate,
     registerUser,
 };

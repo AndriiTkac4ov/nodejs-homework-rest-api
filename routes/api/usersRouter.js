@@ -17,11 +17,11 @@ router.route('/login')
         controllers.users.loginController,
     )
 
-// router.route('/logout')
-//     .post(
-//         middlewares.users.validateUserLogout,
-//         controllers.logoutController,
-//     )
+router.route('/logout')
+    .post(
+        middlewares.auth,
+        controllers.users.logoutController,
+    )
 
 router.route('/current')
     .get(

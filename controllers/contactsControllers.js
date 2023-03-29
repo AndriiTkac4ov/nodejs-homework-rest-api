@@ -1,8 +1,13 @@
 const service = require('../service/contactsService');
 
 const getContactsController = async (req, res, next) => {
+    const { _id } = req.user;
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+    const paginationOptions = { skip, limit: Number(limit) };
+
     try {
-        const allContacts = await service.listContacts();
+        const allContacts = await service.listContacts({owner: _id}, paginationOptions);
         res.status(200).json(allContacts);
     } catch (error) {
         console.log(error);
@@ -14,7 +19,7 @@ const getContactByIdController = async (req, res, next) => {
     const { contactId } = req.params;
 
     try {
-        const contactById = await service.getContactById(contactId);;
+        const contactById = await service.getContactById(contactId);
         res.status(200).json(contactById);
     } catch (error) {
         console.log(error);
@@ -23,8 +28,10 @@ const getContactByIdController = async (req, res, next) => {
 };
 
 const createContactController = async (req, res, next) => {
+    const { _id } = req.user;
+
     try {
-        const newContact = await service.addContact(req.body);;
+        const newContact = await service.addContact({...req.body, owner: _id});
         res.status(201).json(newContact);
     } catch (error) {
         console.log(error);
@@ -48,7 +55,7 @@ const editeContactController = async (req, res, next) => {
     const { contactId } = req.params;
 
     try {
-        const updatedContact = await service.updateContact(contactId, req.body);;
+        const updatedContact = await service.updateContact(contactId, req.body);
         res.status(200).json(updatedContact);
     } catch (error) {
         console.log(error);

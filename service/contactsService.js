@@ -1,7 +1,7 @@
 const Contact = require('./schemas/contactModel');
 
-const listContacts = async () => {
-    return await Contact.find();
+const listContacts = async (userId, paginationOptions) => {
+    return await Contact.find(userId, '', paginationOptions).populate('owner', '_id email subscription');
 };
 
 const getContactById = async (contactId) => {

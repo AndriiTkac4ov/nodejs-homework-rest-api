@@ -4,7 +4,7 @@ const createContactDataValidator = (data) => {
     const schema = Joi.object({
         name: Joi
             .string()
-            .alphanum()
+            // .alphanum()
             .min(1)
             .max(32)
             .required(),
@@ -15,7 +15,7 @@ const createContactDataValidator = (data) => {
         phone: Joi
             .string()
             .min(7)
-            .max(13)
+            .max(21)
             .required(),
         favorite: Joi
             .bool(),

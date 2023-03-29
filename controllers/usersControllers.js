@@ -54,6 +54,7 @@ const loginController = async (req, res, next) => {
             id: user._id
         };
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+        await usersService.findUserByIdAndUpdate(user._id, token);
         res.status(200).json({
             token,
             user: {
@@ -70,10 +71,10 @@ const loginController = async (req, res, next) => {
 };
 
 const logoutController = async (req, res, next) => {
-    const { password, email } = req.body;
+    const { _id } = req.user;
 
-    console.log(password);
-    console.log(email);
+    await usersService.findUserByIdAndUpdate(_id, null)
+    res.status(204).json();
 };
 
 const currentUserController = async (req, res, next) => {
