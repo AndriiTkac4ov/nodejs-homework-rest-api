@@ -52,7 +52,7 @@ const validateEditedContact = (req, res, next) => {
     };
 };
 
-const validateEditedStatus = (req, res, next) => {
+const validateEditedContactStatus = (req, res, next) => {
     const { error, value } = editeContactDataValidator(req.body);
 
     if (!Object.keys(req.body).includes('favorite')) {
@@ -72,5 +72,5 @@ module.exports = {
     checkContactById,
     validateCreatedContact,
     validateEditedContact,
-    validateEditedStatus,
+    validateEditedContactStatus,
 };
