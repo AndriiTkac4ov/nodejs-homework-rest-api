@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = process.env;
 const usersService = require('../service/usersService');
+const gravatar = require('gravatar');
 
 const registerController = async (req, res, next) => {
     const { password, email, subscription } = req.body;
@@ -16,10 +17,12 @@ const registerController = async (req, res, next) => {
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
     try {
-        const newUser = await usersService.registerUser({password: hashPassword, email, subscription}); 
+        const avatarURL = gravatar.url(email);
+        const newUser = await usersService.registerUser({password: hashPassword, email, subscription, avatarURL}); 
         res.status(201).json({
             user: {
                 email,
+                avatarURL,
                 subscription: newUser.subscription,
             }
         });
