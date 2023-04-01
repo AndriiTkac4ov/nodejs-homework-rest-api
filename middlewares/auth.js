@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = process.env;
-const { AppError } = require("../utils");
+const { AppError } = require('../utils');
 const usersService = require('../service/usersService');
 
 const auth = async (req, res, next) => {
