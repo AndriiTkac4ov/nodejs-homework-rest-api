@@ -28,5 +28,12 @@ router.route('/current')
         middlewares.auth,
         controllers.users.currentUserController,
     )
+    
+router.route('/avatars')
+    .patch(
+        middlewares.auth,
+        middlewares.upload.single('avatar'),
+        controllers.users.updateAvatarController,
+    )
 
 module.exports = router
