@@ -11,6 +11,12 @@ router.route('/register')
         controllers.users.registerController,
     )
     
+router.route('/verify/:verificationToken')
+    .get(
+        middlewares.auth,
+        controllers.users.verifyEmailController,
+    )
+
 router.route('/login')
     .post(
         middlewares.users.validateUserLogin,

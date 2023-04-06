@@ -5,7 +5,8 @@ const usersService = require('../service/usersService');
 const gravatar = require('gravatar');
 const path = require('path');
 const fs = require('fs/promises');
-const Jimp = require("jimp");
+const Jimp = require('jimp');
+const { nanoid } = require('nanoid');
 
 const registerController = async (req, res, next) => {
     const { password, email, subscription } = req.body;
@@ -21,25 +22,50 @@ const registerController = async (req, res, next) => {
 
     try {
         const avatarURL = gravatar.url(email);
-        const newUser = await usersService.registerUser({password: hashPassword, email, subscription, avatarURL}); 
+        const verificationToken = nanoid();
+        const newUser = await usersService.registerUser({password: hashPassword, email, subscription, avatarURL, verificationToken}); 
         res.status(201).json({
             user: {
                 email,
                 avatarURL,
                 subscription: newUser.subscription,
+                verificationToken,
             }
         });
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            message: 'Server error'
+            message: 'Server error',
+        });
+    }
+};
+
+const verifyEmailController = async (req, res, next) => {
+    const { verificationToken } = req.params;
+    const user = await usersService.findUserByVerificationToken({verificationToken});
+    
+    if (!user) {
+        return res.status(404).json({
+            message: 'User not found',
+        });
+    }
+
+    try {
+        await usersService.findUserByIdAndUpdateVerify(user._id, {verify: true, verificationToken: null}); 
+        res.status(200).json({
+            message: 'Verification successful'
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Server error',
         });
     }
 };
 
 const loginController = async (req, res, next) => {
     const { password, email } = req.body;
-    const user = await usersService.findUser({email});
+    const user = await usersService.findVerifyUser({email, verify: true});
     
     if (!user) {
         return res.status(401).json({
@@ -60,7 +86,7 @@ const loginController = async (req, res, next) => {
             id: user._id
         };
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-        await usersService.findUserByIdAndUpdate(user._id, token);
+        await usersService.findUserByIdAndUpdateToken(user._id, token);
         res.status(200).json({
             token,
             user: {
@@ -71,7 +97,7 @@ const loginController = async (req, res, next) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            message: 'Server error'
+            message: 'Server error',
         });
     }
 };
@@ -79,7 +105,7 @@ const loginController = async (req, res, next) => {
 const logoutController = async (req, res, next) => {
     const { _id } = req.user;
 
-    await usersService.findUserByIdAndUpdate(_id, null)
+    await usersService.findUserByIdAndUpdateToken(_id, null)
     res.status(204).json();
 };
 
@@ -128,4 +154,5 @@ module.exports = {
     logoutController,
     currentUserController,
     updateAvatarController,
+    verifyEmailController,
 };
