@@ -13,7 +13,6 @@ router.route('/register')
     
 router.route('/verify/:verificationToken')
     .get(
-        middlewares.auth,
         controllers.users.verifyEmailController,
     )
 

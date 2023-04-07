@@ -13,7 +13,7 @@ const registerUser = async (newBody) => {
         html: `<a target='_blank' href='http://localhost:${port}/api/users/verify/${verificationToken}'>Confirm your email</a>`,
     };
 
-    await sendEmail.send(mailMessage);
+    await sendEmail(mailMessage);
 
     return newUser;
 };

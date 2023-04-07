@@ -6,7 +6,8 @@ const gravatar = require('gravatar');
 const path = require('path');
 const fs = require('fs/promises');
 const Jimp = require('jimp');
-const { nanoid } = require('nanoid');
+// const { nanoid } = require('nanoid');
+const { v4: uuidv4 } = require("uuid");
 
 const registerController = async (req, res, next) => {
     const { password, email, subscription } = req.body;
@@ -22,7 +23,8 @@ const registerController = async (req, res, next) => {
 
     try {
         const avatarURL = gravatar.url(email);
-        const verificationToken = nanoid();
+        // const verificationToken = nanoid();
+        const verificationToken = uuidv4();
         const newUser = await usersService.registerUser({password: hashPassword, email, subscription, avatarURL, verificationToken}); 
         res.status(201).json({
             user: {
