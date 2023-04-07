@@ -35,7 +35,7 @@ const findUserByIdAndUpdateVerify = async (id, data) => {
 };
 
 const findVerifyUser = async (email, verify) => {
-    return await User.findOne(email, {verify});
+    return await User.findOne(email, verify);
 };
 
 const findUserByIdAndUpdateToken = async (id, token) => {

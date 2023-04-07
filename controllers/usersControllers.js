@@ -65,6 +65,29 @@ const verifyEmailController = async (req, res, next) => {
     }
 };
 
+const verifyResendingEmailController = async (req, res, next) => {
+    const { verificationToken } = req.params;
+    const user = await usersService.findUserByVerificationToken({verificationToken});
+    
+    if (!user) {
+        return res.status(404).json({
+            message: 'User not found',
+        });
+    }
+
+    try {
+        await usersService.findUserByIdAndUpdateVerify(user._id, {verify: true, verificationToken: null}); 
+        res.status(200).json({
+            message: 'Verification successful'
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Server error',
+        });
+    }
+};
+
 const loginController = async (req, res, next) => {
     const { password, email } = req.body;
     const user = await usersService.findVerifyUser({email, verify: true});
@@ -157,4 +180,5 @@ module.exports = {
     currentUserController,
     updateAvatarController,
     verifyEmailController,
+    verifyResendingEmailController,
 };
