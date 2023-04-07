@@ -65,9 +65,9 @@ const verifyEmailController = async (req, res, next) => {
     }
 };
 
-const verifyResendingEmailController = async (req, res, next) => {
-    const { verificationToken } = req.params;
-    const user = await usersService.findUserByVerificationToken({verificationToken});
+const resendingEmailController = async (req, res, next) => {
+    const { email } = req.body;
+    const user = await usersService.findUserByVerificationToken({email});
     
     if (!user) {
         return res.status(404).json({
@@ -76,10 +76,16 @@ const verifyResendingEmailController = async (req, res, next) => {
     }
 
     try {
-        await usersService.findUserByIdAndUpdateVerify(user._id, {verify: true, verificationToken: null}); 
-        res.status(200).json({
-            message: 'Verification successful'
-        });
+        if (!user.verify) {
+            await usersService.findUserByIdAndResendEmailForVerify(user._id); 
+            res.status(200).json({
+                message: 'Verification email sent'
+            });
+        } else {
+            res.status(400).json({
+                message: 'Verification has already been passed'
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -180,5 +186,5 @@ module.exports = {
     currentUserController,
     updateAvatarController,
     verifyEmailController,
-    verifyResendingEmailController,
+    resendingEmailController,
 };

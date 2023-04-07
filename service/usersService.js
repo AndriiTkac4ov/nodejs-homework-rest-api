@@ -34,6 +34,20 @@ const findUserByIdAndUpdateVerify = async (id, data) => {
     return await User.findByIdAndUpdate(id, data);
 };
 
+const findUserByIdAndResendEmailForVerify = async (id) => {
+    const user = await User.findById(id);
+
+    const { email, verificationToken } = user;
+    const mailMessage = {
+        to: email,
+        subject: 'Thank you for registration',
+        text: 'Confirm your email',
+        html: `<a target='_blank' href='http://localhost:${port}/api/users/verify/${verificationToken}'>Confirm your email</a>`,
+    };
+
+    await sendEmail(mailMessage);
+};
+
 const findVerifyUser = async (email, verify) => {
     return await User.findOne(email, verify);
 };
@@ -52,6 +66,7 @@ module.exports = {
     findUserById,
     findUserByVerificationToken,
     findUserByIdAndUpdateVerify,
+    findUserByIdAndResendEmailForVerify,
     findVerifyUser,
     findUserByIdAndUpdateToken,
     findUserByIdAndUpdateAvatar,

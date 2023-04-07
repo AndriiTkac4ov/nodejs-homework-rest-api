@@ -19,7 +19,7 @@ router.route('/verify/:verificationToken')
 router.route('/verify')
     .post(
         middlewares.users.validateUserConfirmation,
-        controllers.users.verifyResendingEmailController,
+        controllers.users.resendingEmailController,
     )
 
 router.route('/login')
