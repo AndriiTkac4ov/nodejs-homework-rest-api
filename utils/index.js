@@ -7,7 +7,9 @@ const {
 const {
     registerUserDataValidator,
     loginUserDataValidator,
+    verifyUserEmailValidator,
 } = require('./userValidator');
+const sendEmail = require('./sendEmail');
 
 module.exports = {
     AppError,
@@ -16,4 +18,6 @@ module.exports = {
     editeContactDataValidator,
     registerUserDataValidator,
     loginUserDataValidator,
+    verifyUserEmailValidator,
+    sendEmail,
 };
